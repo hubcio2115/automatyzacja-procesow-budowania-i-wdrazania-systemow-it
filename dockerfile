@@ -5,6 +5,11 @@ WORKDIR /usr/src/app
 # Install Bun
 RUN npm install -g bun
 
+# Install dockerize
+ENV DOCKERIZE_VERSION v0.7.0
+RUN wget -O - https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-arm64-$DOCKERIZE_VERSION.tar.gz | tar xzf - -C /usr/local/bin \
+    && apt-get autoremove -yqq --purge wget && rm -rf /var/lib/apt/lists/*
+
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 FROM base AS install
@@ -33,8 +38,9 @@ FROM base AS release
 COPY --from=install /temp/prod/node_modules node_modules
 COPY --from=prerelease /usr/src/app/dist/main.js .
 COPY --from=prerelease /usr/src/app/package.json .
+COPY --from=prerelease /usr/src/app/drizzle drizzle
 
 # run the app
-USER bun
+USER node
 EXPOSE 3000/tcp
-ENTRYPOINT [ "bun", "run", "dist/main.js" ]
+ENTRYPOINT sh -c "dockerize -wait tcp://$DB_HOST:$DB_PORT -timeout 60s && bun run main.js"
