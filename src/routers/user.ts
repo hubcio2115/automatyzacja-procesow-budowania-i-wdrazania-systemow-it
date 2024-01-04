@@ -1,105 +1,109 @@
-import { Elysia, t } from "elysia";
+import { type DecoratorBase, Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
-import { insertUserSchema, selectUserSchema } from "~/validators";
-import { db } from "~/db/db";
+import { insertUserSchema, selectUserSchema } from "../validators";
 import { users } from "~/db/schema";
+import { type DATABASE } from "~/db/db";
 
-export const usersRouter = new Elysia().group("/users", (app) =>
-  app
-    .get("", async () => {
-      const res = await db.select().from(users);
+type Decorators = Omit<DecoratorBase, "store"> & { store: { db: DATABASE } };
 
-      return res;
-    })
+export const usersRouter = new Elysia<"/users", Decorators>().group(
+  "/users",
+  (app) =>
+    app
+      .get("", async ({ store: { db } }) => {
+        const query = await db.select().from(users);
 
-    .get(
-      ":id",
-      async ({ set, params: { id } }) => {
-        const res = await db.select().from(users).where(eq(users.id, id));
+        return query;
+      })
 
-        if (res.length === 0) {
-          set.status = 404;
+      .get(
+        ":id",
+        async ({ set, params: { id }, store: { db } }) => {
+          const res = await db.select().from(users).where(eq(users.id, id));
+
+          if (res.length === 0) {
+            set.status = 404;
+            return new Response();
+          }
+
+          return res;
+        },
+        {
+          params: t.Pick(selectUserSchema, ["id"]),
+        },
+      )
+
+      .post(
+        "",
+        async ({ body, store: { db } }) => {
+          await db.insert(users).values(body);
+
           return new Response();
-        }
+        },
+        {
+          body: insertUserSchema,
+        },
+      )
 
-        return res;
-      },
-      {
-        params: t.Pick(selectUserSchema, ["id"]),
-      },
-    )
+      .put(
+        ":id",
+        async ({ body, set, params: { id }, store: { db } }) => {
+          const user = await db
+            .select({ id: users.id })
+            .from(users)
+            .where(eq(users.id, id));
 
-    .post(
-      "",
-      async ({ body }) => {
-        await db.insert(users).values(body);
+          if (user.length === 0) {
+            set.status = 404;
+            return new Response();
+          }
 
-        return new Response();
-      },
-      {
-        body: insertUserSchema,
-      },
-    )
+          await db.update(users).set(body).where(eq(users.id, id));
 
-    .put(
-      ":id",
-      async ({ body, set, params: { id } }) => {
-        const user = await db
-          .select({ id: users.id })
-          .from(users)
-          .where(eq(users.id, id));
+          const res = await db.select().from(users).where(eq(users.id, id));
 
-        if (user.length === 0) {
-          set.status = 404;
-          return new Response();
-        }
+          return res;
+        },
+        {
+          body: insertUserSchema,
+          params: t.Pick(selectUserSchema, ["id"]),
+        },
+      )
 
-        await db.update(users).set(body).where(eq(users.id, id));
+      .patch(
+        ":id",
+        async ({ body, params: { id }, store: { db } }) => {
+          await db.update(users).set(body).where(eq(users.id, +id));
 
-        const res = await db.select().from(users).where(eq(users.id, id));
+          const res = await db.select().from(users).where(eq(users.id, id));
 
-        return res;
-      },
-      {
-        body: insertUserSchema,
-        params: t.Pick(selectUserSchema, ["id"]),
-      },
-    )
+          return res;
+        },
+        {
+          body: t.Partial(insertUserSchema),
+          params: t.Pick(selectUserSchema, ["id"]),
+        },
+      )
 
-    .patch(
-      ":id",
-      async ({ body, params: { id } }) => {
-        await db.update(users).set(body).where(eq(users.id, +id));
+      .delete(
+        ":id",
+        async ({ set, params: { id }, store: { db } }) => {
+          const res = await db
+            .select({ id: users.id })
+            .from(users)
+            .where(eq(users.id, id));
 
-        const res = await db.select().from(users).where(eq(users.id, id));
+          if (res.length === 0) {
+            set.status = 404;
+            return new Response();
+          }
 
-        return res;
-      },
-      {
-        body: t.Partial(insertUserSchema),
-        params: t.Pick(selectUserSchema, ["id"]),
-      },
-    )
+          await db.delete(users).where(eq(users.id, id));
 
-    .delete(
-      ":id",
-      async ({ set, params: { id } }) => {
-        const res = await db
-          .select({ id: users.id })
-          .from(users)
-          .where(eq(users.id, id));
-
-        if (res.length === 0) {
-          set.status = 404;
-          return new Response();
-        }
-
-        await db.delete(users).where(eq(users.id, id));
-
-        return res[0];
-      },
-      {
-        params: t.Pick(selectUserSchema, ["id"]),
-      },
-    ),
+          return res[0];
+        },
+        {
+          params: t.Pick(selectUserSchema, ["id"]),
+        },
+      ),
 );

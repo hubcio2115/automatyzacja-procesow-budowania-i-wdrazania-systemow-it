@@ -3,11 +3,18 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    DATABASE_URL: z.string().url(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
     PORT: z.string().refine((arg) => /^[\d]+$/.test(arg), {
+      message: "Port has to be a number.",
+    }),
+
+    DB_HOST: z.string(),
+    DB_USER: z.string(),
+    DB_PASSWORD: z.string(),
+    DB_NAME: z.string(),
+    DB_PORT: z.string().refine((arg) => /^[\d]+$/.test(arg), {
       message: "Port has to be a number.",
     }),
   },
