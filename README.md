@@ -12,7 +12,7 @@
 - [ ] Stwórz pipeline multibranch na Jenkins
 - [ ] W Jenkinsfile proszę zawsze dodać opcję:
 
-  ```jenkinsfile
+  ```groovy
   pipeline {
     agent any
     options {
