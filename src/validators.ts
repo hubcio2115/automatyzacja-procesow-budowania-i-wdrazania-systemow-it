@@ -1,7 +1,5 @@
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { users } from "./schema";
+import { createInsertSchema, createSelectSchema } from "drizzle-typebox";
+import { users } from "~/db/schema";
 
-export const insertUserSchema = createInsertSchema(users, {
-  email: (schema) => schema.email.email(),
-});
+export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
