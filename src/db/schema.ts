@@ -1,10 +1,9 @@
-import { mysqlTable, bigint, varchar, tinyint } from "drizzle-orm/mysql-core";
+import { pgTable, serial, varchar, smallint } from "drizzle-orm/pg-core";
 
-// declaring enum in database
-export const users = mysqlTable("users", {
-  id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
   name: varchar("name", { length: 256 }).notNull(),
   surname: varchar("surname", { length: 256 }).notNull(),
-  age: tinyint("age").notNull(),
+  age: smallint("age").notNull(),
   email: varchar("email", { length: 256 }).notNull(),
 });

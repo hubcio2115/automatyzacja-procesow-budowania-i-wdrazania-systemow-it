@@ -1,14 +1,24 @@
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/postgres-js";
 import { users } from "./schema";
 import { env } from "~/env";
+import postgres from "postgres";
+import { migrate } from "drizzle-orm/postgres-js/migrator";
 
-const connection = await mysql.createConnection({
-  uri: env.DATABASE_URL,
-});
+const migrationClient = postgres(
+  `postgres://${env.DB_USER}:${env.DB_PASSWORD}\@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
+  { max: 1 },
+);
 
-// @ts-expect-error, Don't know why `Connection` is not type of `Connection`
-export const db = drizzle(connection, {
-  mode: "default",
+void migrate(drizzle(migrationClient), {
+  migrationsFolder: "drizzle",
+}).then(() => migrationClient.end());
+
+const queryClient = postgres(
+  `postgres://${env.DB_USER}:${env.DB_PASSWORD}\@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`,
+);
+
+export const db = drizzle(queryClient, {
   schema: { users },
 });
+
+export type DATABASE = typeof db;
