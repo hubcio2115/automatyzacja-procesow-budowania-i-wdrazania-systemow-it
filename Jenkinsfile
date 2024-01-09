@@ -25,7 +25,7 @@ pipeline {
         sh 'bun i'
       }
     }
-    stage('test') {
+    stage('Test') {
       agent {
         docker { image 'oven/bun:1' }
       }
