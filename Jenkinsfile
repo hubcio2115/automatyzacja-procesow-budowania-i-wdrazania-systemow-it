@@ -50,7 +50,7 @@ pipeline {
     }
     stage ('Pushing Docker Image to Dockerhub') {
       when {
-        branch 'master'
+        branch 'main'
       }
       steps {
         script {
