@@ -6,7 +6,7 @@ pipeline {
   }
   environment {
     DATE = new Date().format('yy.M')
-    TAG = "${DATE}"
+    TAG = "${DATE}.${BUILD_NUMBER}"
   }
   triggers {
     gitlab(
@@ -44,8 +44,7 @@ pipeline {
     stage ('Docker Build') {
       steps {
         script {
-          echo 'hkowalski/test-rest-api:${TAG}'
-          docker.build('hkowalski/test-rest-api:${TAG}')
+          docker.build("hkowalski/test-rest-api:${TAG}")
         }
       }
     }
@@ -55,9 +54,9 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry('https://registry.hub.docker.com', 'docker credential')
-          docker.image('hkowalski/test-rest-api:${TAG}').push()
-          docker.image('hkowalski/test-rest-api:${TAG}').push('latest')
+          docker.withRegistry("https://registry.hub.docker.com", "docker credential")
+          docker.image("hkowalski/test-rest-api:${TAG}").push()
+          docker.image("hkowalski/test-rest-api:${TAG}").push('latest')
         }
       }
     }
