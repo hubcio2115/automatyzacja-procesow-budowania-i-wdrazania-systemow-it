@@ -18,18 +18,25 @@ pipeline {
   }
   stages {
     stage('Prepare') {
+      agent {
+        docker { image 'bun:latest' }
+      }
       steps {
-        script {
-          stash includes: 'bun', name: 'binaryStash'
-        }
+        sh 'bun i'
       }
     }
-    stage ("Test") {
+    stage('test') {
+      agent {
+        docker { image 'bun:latest' }
+      }
       steps {
         sh 'bun test'
       }
     }
     stage ("Build") {
+      agent {
+        docker { image 'bun:latest' }
+      }
       steps {
         sh 'bun run build'
       }
