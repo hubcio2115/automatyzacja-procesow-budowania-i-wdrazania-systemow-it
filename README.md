@@ -44,9 +44,9 @@
 
 ## Zad 3. Kubernetes
 
-- [ ] Przygotowanie helm chartów lub obiektów kubernetesowych do uruchomienia backend rest api - z ingressen
-- [ ] Konfiguracja postgres + volumen danych
-- [ ] Przygotowanie config mapy z parametrami do połączenia aplikacji z bazą danych
-- [ ] Modyfikacja dockerfile żeby ustawić zmienne systemowe do połączenia z bazą danych
-- [ ] Parametryzowanie aplikacji backendowej - parametry powinny być wczytywane ze zmiennych systemowych
-- [ ] Dodanie do podów tworzenie zmiennych systemowych na podstawie danych z config mapy i secretów (hasło do bazy danych)
+- [x] Przygotowanie helm chartów lub obiektów kubernetesowych do uruchomienia backend rest api - z ingressen
+- [x] Konfiguracja postgres + volumen danych
+- [x] Przygotowanie config mapy z parametrami do połączenia aplikacji z bazą danych
+- [x] Modyfikacja dockerfile żeby ustawić zmienne systemowe do połączenia z bazą danych
+- [x] Parametryzowanie aplikacji backendowej - parametry powinny być wczytywane ze zmiennych systemowych
+- [x] Dodanie do podów tworzenie zmiennych systemowych na podstawie danych z config mapy i secretów (hasło do bazy danych)
