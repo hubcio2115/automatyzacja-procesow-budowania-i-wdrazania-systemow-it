@@ -44,6 +44,7 @@ pipeline {
     stage ('Docker Build') {
       steps {
         script {
+          echo 'hkowalski/test-rest-api:${TAG}'
           docker.build('hkowalski/test-rest-api:${TAG}')
         }
       }
