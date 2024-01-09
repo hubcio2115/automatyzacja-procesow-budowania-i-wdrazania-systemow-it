@@ -54,7 +54,7 @@ pipeline {
       }
       steps {
         script {
-          docker.withRegistry("https://registry.hub.docker.com", "docker credential") {
+          docker.withRegistry("https://registry.hub.docker.com", "docker_credential") {
             docker.image("hkowalski/test-rest-api:${TAG}").push()
           }
         }
