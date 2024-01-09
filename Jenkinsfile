@@ -4,7 +4,7 @@ pipeline {
     timeout(5)
     gitLabConnection('GitLab')
   }
-  environemnt {
+  environment {
     DATE = new Date().format('yy.M')
     TAG = "${DATE}.${BUILD_NUMBER}"
   }
