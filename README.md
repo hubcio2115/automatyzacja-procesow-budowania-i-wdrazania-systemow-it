@@ -1,7 +1,7 @@
 ## Zad 1. Aplikacja
 
 - [x] Przygotuj projekt: Rest Api + Baza Danych
-- [ ] Wrzuć kod do repo na gitlab
+- [x] Wrzuć kod do repo na gitlab
 - [x] Napisz unit testy i testy integracyjne do swojej aplikacji
 - [x] Wizualizacja api - np. swagger ui, open api
 - [x] Przygotuj docker-compose w którym postawić środowisko "lokalne"
