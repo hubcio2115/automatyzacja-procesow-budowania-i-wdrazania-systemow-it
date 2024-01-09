@@ -55,7 +55,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry("https://registry.hub.docker.com", "docker_credential") {
-            docker.image("hkowalski/test-rest-api:${TAG}").push()
+            docker.image("hubcio2115/test-rest-api:${TAG}").push()
           }
         }
       }
