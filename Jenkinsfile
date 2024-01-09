@@ -19,7 +19,7 @@ pipeline {
   stages {
     stage('Prepare') {
       agent {
-        docker { image 'bun:latest' }
+        docker { image 'oven/bun:latest' }
       }
       steps {
         sh 'bun i'
@@ -27,7 +27,7 @@ pipeline {
     }
     stage('test') {
       agent {
-        docker { image 'bun:latest' }
+        docker { image 'oven/bun:latest' }
       }
       steps {
         sh 'bun test'
@@ -35,7 +35,7 @@ pipeline {
     }
     stage ("Build") {
       agent {
-        docker { image 'bun:latest' }
+        docker { image 'oven/bun:latest' }
       }
       steps {
         sh 'bun run build'
