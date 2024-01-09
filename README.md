@@ -9,8 +9,8 @@
 
 ## Zad 2. CI/CD
 
-- [ ] Stwórz pipeline multibranch na Jenkins
-- [ ] W Jenkinsfile proszę zawsze dodać opcję:
+- [x] Stwórz pipeline multibranch na Jenkins
+- [x] W Jenkinsfile proszę zawsze dodać opcję:
 
   ```jenkinsfile
   pipeline {
@@ -37,10 +37,10 @@
   }
   ```
 
-- [ ] Skonfiguruj projekt gitlab do triggerowania pipelinów na jenkinskie
-- [ ] Przygotuj webhooki
-- [ ] Stwórz pipeline który zbuduje, przetestuje, zbuduje obraz dockerowy
-- [ ] Dodaj stage do pipeline który dla brancha master wypchnie obraz do docker hub
+- [x] Skonfiguruj projekt gitlab do triggerowania pipelinów na jenkinskie
+- [x] Przygotuj webhooki
+- [x] Stwórz pipeline który zbuduje, przetestuje, zbuduje obraz dockerowy
+- [x] Dodaj stage do pipeline który dla brancha master wypchnie obraz do docker hub
 
 ## Zad 3. Kubernetes
 
