@@ -41,7 +41,7 @@ pipeline {
         }
       }
     }
-    stage ("Pushing Docker Image to Dockerhub') {
+    stage ('Pushing Docker Image to Dockerhub') {
       when {
         branch 'master'
       }
